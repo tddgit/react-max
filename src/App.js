@@ -1,5 +1,7 @@
 import React, { useState, Component } from "react";
 import Person from "./Person/Person";
+import Radium from "radium";
+
 import "./Person/Person.css";
 import "./App.css";
 
@@ -60,19 +62,27 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
       border: "1x solid blue",
       padding: "8px",
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black",
+      },
     };
 
     let persons = null;
+
     if (this.state.showPersons) {
       persons = (
         <div>
           {this.state.persons.map((person, index) => {
             return (
               <Person
+                className={"Person"}
                 click={() => this.deletePersonsHandler(index)}
                 name={person.name}
                 age={person.age}
@@ -83,13 +93,28 @@ class App extends Component {
           })}
         </div>
       );
+      style.backgroundColor = "red";
+      style[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black",
+      };
+    }
+
+    const classes = [];
+
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
     }
 
     return (
       <div>
-        <div className={"Person"}>
+        <div className={"App"}>
           <h1>Hi, I'am a React app</h1>
-          <p>This is really working</p>
+          <p className={classes.join(" ")}>This is really working</p>
           <button style={style} onClick={this.togglePersonsHandler}>
             Toggle Persons List
           </button>
@@ -100,7 +125,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Radium(App);
 
 // const App1 = (props) => {
 //   const [personsState, setPersonsState] = useState({
